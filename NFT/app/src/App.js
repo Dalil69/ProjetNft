@@ -6,8 +6,9 @@ function App() {
   const [conjoint1, setConjoint1] = useState('');
   const [conjoint2, setConjoint2] = useState('');
   const [marriageStatus, setMarriageStatus] = useState('');
+  const [confirmation, setConfirmation] = useState('');
 
-  const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545')); // Assurez-vous d'utiliser le bon fournisseur
+  const web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545')); // Assurez-vous d'utiliser le bon fournisseur
 
   async function marier() {
     try {
@@ -16,8 +17,10 @@ function App() {
       
       await contract.methods.marier(conjoint1, conjoint2).send({ from: fromAddress });
       setMarriageStatus('Mariés');
+      setConfirmation('Le mariage a été effectué avec succès.');
     } catch (error) {
       console.error(error);
+      setConfirmation('Erreur lors de la tentative de mariage.');
     }
   }
 
@@ -28,8 +31,10 @@ function App() {
       
       await contract.methods.divorcer().send({ from: fromAddress });
       setMarriageStatus('Divorcés');
+      setConfirmation('Le divorce a été effectué avec succès.');
     } catch (error) {
       console.error(error);
+      setConfirmation('Erreur lors de la tentative de divorce.');
     }
   }
 
@@ -41,6 +46,7 @@ function App() {
       <button onClick={marier}>Marier</button>
       <button onClick={divorcer}>Divorcer</button>
       <p>Statut du mariage : {marriageStatus}</p>
+      <p>{confirmation}</p>
     </div>
   );
 }
